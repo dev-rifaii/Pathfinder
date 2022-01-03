@@ -1,36 +1,27 @@
 import java.util.*;
 
-public class Graph {
-    Map<String, LinkedList<Edge>> adjacencyList;
-    boolean isDirected;
+public class Graph<T> {
+    private Map<T, List<Edge>> adjacencyList;
 
-    public Graph(boolean isDirected) {
-        this.isDirected = isDirected;
+    public Graph() {
         adjacencyList = new HashMap<>();
     }
 
     //Checks if a vertex with the same name exists, if not adds it and returns true
-    public boolean addVertex(String name) {
-        if (adjacencyList.containsKey(name)) {
-            return false;
-        } else {
-            adjacencyList.put(name, new LinkedList<>());
+    public boolean addVertex(T vertex) {
+        if (!adjacencyList.containsKey(vertex)) {
+            adjacencyList.put(vertex, new LinkedList<Edge>());
             return true;
         }
+        return false;
     }
 
-    /*If graph is directed, adds the edge only from source to destination, if graph is not directed
-    adds the edge to both vertices. */
-    public boolean addEdge(String src, String dst, int weight) {
-        if (isDirected) {
-            Edge edge = new Edge(src, dst, weight);
-            adjacencyList.get(src).add(new Edge(src, dst, weight));
-            return true;
-        }
-        if (!isDirected) {
-            Edge edge = new Edge(src, dst, weight);
-            adjacencyList.get(src).add(new Edge(src, dst, weight));
-            adjacencyList.get(dst).add(new Edge(dst, src, weight));
+
+    public boolean addEdge(T src, T dst) {
+        Edge edge = new Edge(src, dst);
+        if (adjacencyList.containsKey(src) && adjacencyList.containsKey(dst)) {
+            adjacencyList.get(src).add(edge);
+            adjacencyList.get(dst).add(edge);
             return true;
         }
         return false;
@@ -46,15 +37,14 @@ public class Graph {
 
 
     //Removes the vertex and all the edges tied to it.
-    public boolean removeVertex(String name) {
-        if (adjacencyList.containsKey(name)) {
-            adjacencyList.remove(name);
-            for (Map.Entry<String, LinkedList<Edge>> entry : getMap().entrySet()) {
-                LinkedList<Edge> list = entry.getValue();
+    public boolean removeVertex(T vertex) {
+        if (adjacencyList.containsKey(vertex)) {
+            adjacencyList.remove(vertex);
+            for (Map.Entry<T, List<Edge>> entry : getAdjacencyList().entrySet()) {
+                List<Edge> list = entry.getValue();
                 for (Edge e : list) {
-                    if (e.getSrc().contentEquals(name) || e.getDst().contentEquals(name)) {
+                    if (e.getSrc().equals(vertex) || e.getDst().equals(vertex)) {
                         list.remove(e);
-
                     }
                 }
             }
@@ -64,39 +54,19 @@ public class Graph {
     }
 
     /*IF graph is directed, removes the edge from the list of the source
-    * If graph is not directed, removes the edge from the list of the source and destination*/
-    public boolean removeEdge(String src, String dst, int weight) {
-        Edge edge = new Edge(src, dst, weight);
-        Edge edge1 = new Edge(dst, src, weight);
-        if (adjacencyList.containsKey(src)) {
-            List<Edge> list = adjacencyList.get(src);
-            if (isDirected) {
-                for (Edge e : list) {
-                    if (e.equals(edge)) ;
-                    list.remove(e);
-                    return true;
-                }
-            }
-            if (!isDirected) {
-                List<Edge> list1 = adjacencyList.get(dst);
-                for (Edge e : list) {
-                    if (e.equals(edge)) {
-                        list.remove(e);
-                    }
-                }
-                for (Edge e : list1) {
-                    if (e.equals(edge1)) {
-                        list1.remove(e);
-                        return true;
-                    }
-                }
-            }
+     * If graph is not directed, removes the edge from the list of the source and destination*/
+    public boolean removeEdge(Edge edge) {
+        List list = adjacencyList.get(edge.getSrc());
+        List list2 = adjacencyList.get(edge.getDst());
+        if (list.contains(edge)) {
+            list.remove(edge);
+            list2.remove(edge);
+            return true;
         }
         return false;
     }
 
-    public Map<String, LinkedList<Edge>> getMap() {
+    public Map<T, List<Edge>> getAdjacencyList() {
         return adjacencyList;
     }
-
 }

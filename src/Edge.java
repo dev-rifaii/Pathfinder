@@ -1,23 +1,22 @@
 import java.util.Objects;
 
-public class Edge {
-    private String src;
-    private String dst;
-    int weight;
+public class Edge<T> {
+    private T src;
+    private T dst;
+    private int weight;
 
 
-    public Edge(String src, String dst, int weight) {
+    public Edge(T src, T dst) {
         this.src = src;
         this.dst = dst;
-        this.weight = weight;
+
     }
 
-
-    public String getSrc() {
+    public T getSrc() {
         return src;
     }
 
-    public String getDst() {
+    public T getDst() {
         return dst;
     }
 
@@ -27,10 +26,7 @@ public class Edge {
 
     @Override
     public String toString() {
-        return "Edge:" +
-                "source='" + src + '\'' +
-                ", Destination='" + dst + '\'' +
-                ", weight=" + weight;
+        return "Edge source: " + src + ", destination: " + dst;
     }
 
 
