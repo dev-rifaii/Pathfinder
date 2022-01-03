@@ -3,8 +3,6 @@ import java.util.Objects;
 public class Edge<T> {
     private T src;
     private T dst;
-    private int weight;
-
 
     public Edge(T src, T dst) {
         this.src = src;
@@ -18,10 +16,6 @@ public class Edge<T> {
 
     public T getDst() {
         return dst;
-    }
-
-    public int getWeight() {
-        return weight;
     }
 
     @Override
