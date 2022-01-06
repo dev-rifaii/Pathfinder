@@ -1,7 +1,17 @@
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 public interface Graph<T> {
 
-    boolean addVertex(T vertex);
-    boolean addEdge(T src, T dst);
-    boolean removeVertex(T vertex);
-    boolean removeEdge(T source, T destination);
+
+    abstract boolean addEdge(T src, Edge edge);
+
+    abstract boolean removeEdge(T source, T destination);
+
+    public boolean addVertex(T vertex);
+
+    public boolean removeVertex(T vertex);
+
 }

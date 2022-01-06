@@ -1,8 +1,9 @@
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
-
-import java.util.*;
-
-public class UndirectedGraph<T> implements Graph<T> {
+public class DirectedGraph<T> implements Graph<T> {
     protected final Map<T, List<Edge>> adjacencyList = new HashMap<>();
 
     @Override
@@ -35,24 +36,14 @@ public class UndirectedGraph<T> implements Graph<T> {
     public boolean addEdge(T src, Edge dst) {
         if (adjacencyList.containsKey(src) && adjacencyList.containsKey(dst.getDestination())) {
             adjacencyList.get(src).add(dst);
-            adjacencyList.get(dst.getDestination()).add(new Edge(src));
             return true;
         }
         return false;
     }
 
-
-    //Prints the adjacecny list
-    public void printAdjacencyList() {
-        adjacencyList.entrySet().forEach(entry -> {
-            System.out.println(entry.getKey() + " " + entry.getValue().toString());
-        });
-    }
-
-    //Removes the edge from the list of the source and destination
     @Override
     public boolean removeEdge(T source, T destination) {
-        if (adjacencyList.containsKey(source) && adjacencyList.containsKey(destination)) {
+        if (adjacencyList.containsKey(source)) {
             for (Edge e : adjacencyList.get(source)) {
                 if (e.getDestination().equals(destination)) {
                     adjacencyList.get(source).remove(e);
@@ -63,14 +54,10 @@ public class UndirectedGraph<T> implements Graph<T> {
         return false;
     }
 
-    public Map<T, List<Edge>> getAdjacencyList() {
-        return Collections.unmodifiableMap(adjacencyList);
-    }
-
-    @Override
-    public String toString() {
-        return "UndirectedGraph{" +
-                "adjacencyList=" + adjacencyList +
-                '}';
+    //Prints the adjacecny list
+    public void printAdjacencyList() {
+        adjacencyList.entrySet().forEach(entry -> {
+            System.out.println(entry.getKey() + " " + entry.getValue().toString());
+        });
     }
 }
