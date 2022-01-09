@@ -1,14 +1,14 @@
 public class Edge<T> {
 
     private T destination;
-    private float weight;
+    private int weight;
 
     public Edge(T destination) {
         this.destination = destination;
 
     }
 
-    public Edge(T destination, float weight) {
+    public Edge(T destination, int weight) {
         this.destination = destination;
         this.weight = weight;
     }
@@ -18,7 +18,7 @@ public class Edge<T> {
         return destination;
     }
 
-    public float getWeight() {
+    public int getWeight() {
         return weight;
     }
 

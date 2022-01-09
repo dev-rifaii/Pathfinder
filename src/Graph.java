@@ -6,12 +6,15 @@ import java.util.Map;
 public interface Graph<T> {
 
 
-    abstract boolean addEdge(T src, Edge edge);
+    boolean addEdge(T src, Edge edge);
 
-    abstract boolean removeEdge(T source, T destination);
+    boolean removeEdge(T source, T destination);
 
-    public boolean addVertex(T vertex);
+    boolean addVertex(T vertex);
 
-    public boolean removeVertex(T vertex);
+    boolean removeVertex(T vertex);
 
+    List<Edge> getNeighbours(T vertex);
+
+    Map<T, List<Edge>> getAdjacencyList();
 }

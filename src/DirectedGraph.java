@@ -1,7 +1,4 @@
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DirectedGraph<T> implements Graph<T> {
     protected final Map<T, List<Edge>> adjacencyList = new HashMap<>();
@@ -41,6 +38,7 @@ public class DirectedGraph<T> implements Graph<T> {
         return false;
     }
 
+
     @Override
     public boolean removeEdge(T source, T destination) {
         if (adjacencyList.containsKey(source)) {
@@ -53,6 +51,12 @@ public class DirectedGraph<T> implements Graph<T> {
         }
         return false;
     }
+    public Map<T, List<Edge>> getAdjacencyList() {
+        return Collections.unmodifiableMap(adjacencyList);
+    }
+    public List<Edge> getNeighbours(T node) {
+        return adjacencyList.get(node);
+    }
 
     //Prints the adjacecny list
     public void printAdjacencyList() {
@@ -60,4 +64,6 @@ public class DirectedGraph<T> implements Graph<T> {
             System.out.println(entry.getKey() + " " + entry.getValue().toString());
         });
     }
+
+
 }

@@ -32,10 +32,15 @@ public class UndirectedGraph<T> implements Graph<T> {
     }
 
     @Override
+    public List<Edge> getNeighbours(T vertex) {
+        return adjacencyList.get(vertex);
+    }
+
+    @Override
     public boolean addEdge(T src, Edge dst) {
         if (adjacencyList.containsKey(src) && adjacencyList.containsKey(dst.getDestination())) {
             adjacencyList.get(src).add(dst);
-            adjacencyList.get(dst.getDestination()).add(new Edge(src));
+            adjacencyList.get(dst.getDestination()).add(new Edge(src, dst.getWeight()));
             return true;
         }
         return false;
