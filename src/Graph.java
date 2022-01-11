@@ -14,7 +14,10 @@ public interface Graph<T> {
 
     boolean removeVertex(T vertex);
 
+    void printAdjacencyList();
+
     List<Edge> getNeighbours(T vertex);
+
 
     Map<T, List<Edge>> getAdjacencyList();
 }

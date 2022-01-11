@@ -4,28 +4,25 @@ import java.util.*;
 public class Pathfind<T> {
 
 
+   //Dijkstra's Algorithm
     public void findShortestPath(Graph graph, T source) {
         //gets the adjacency list
         Map<T, List<Edge>> adj = graph.getAdjacencyList();
         int verticesCount = adj.size();
+        //Storing the distances here
         Map<Node<T>, Integer> distances = new HashMap<>();
+        //Keeping track of visited vertices here
         List<T> visited = new ArrayList<>();
         PriorityQueue<Node> pq = new PriorityQueue<Node>(verticesCount, new Node());
+        //Adding all vertices to distances map and setting the value of distance to max
         for (T vertex : adj.keySet()) {
             distances.put(new Node(vertex, 0), Integer.MAX_VALUE);
         }
-        distances.put(new Node(source), 0);
+        distances.put(new Node(source, null), 0);
 
         pq.add(new Node(source, 0));
 
-//
-//        for (T vert : distances.keySet()) {
-//            System.out.println(vert.toString());
-//            System.out.println(distances.get(vert));
-//        }
-//        System.out.println(pq.poll().getNode().toString());
-
-        while (visited.size() != verticesCount) {
+        while (!pq.isEmpty()) {
             Node<T> node = pq.poll();
             T vertex = node.getNode();
             visited.add(vertex);
@@ -36,7 +33,8 @@ public class Pathfind<T> {
                     T destNode = edge.getDestination();
 
                     if (totalCost < distances.get(new Node(destNode))) {
-                        distances.put(new Node(destNode), totalCost);
+
+                        distances.put(new Node<T>(destNode, vertex), totalCost);
 
 
                     }
@@ -48,6 +46,9 @@ public class Pathfind<T> {
 
         for (Node<T> node : distances.keySet()) {
             System.out.println(node.getNode().toString() + " ||| Cost = " + distances.get(node));
+            if (node.getPredecessor() != null) {
+                System.out.println(" ||| Predecessor = " + node.getPredecessor());
+            }
         }
 
     }
@@ -69,6 +70,11 @@ public class Pathfind<T> {
         public Node(T node, int cost) {
             this.node = node;
             this.cost = cost;
+        }
+
+        public Node(T node, T predecessor) {
+            this.node = node;
+            this.predecessor = predecessor;
         }
 
         public Node(T node, int cost, T predecessor) {
