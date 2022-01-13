@@ -4,7 +4,7 @@ import java.util.*;
 public class Pathfind<T> {
 
 
-   //Dijkstra's Algorithm
+    //Dijkstra's Algorithm
     public void findShortestPath(Graph graph, T source) {
         //gets the adjacency list
         Map<T, List<Edge>> adj = graph.getAdjacencyList();
@@ -13,12 +13,12 @@ public class Pathfind<T> {
         Map<Node<T>, Integer> distances = new HashMap<>();
         //Keeping track of visited vertices here
         List<T> visited = new ArrayList<>();
-        PriorityQueue<Node> pq = new PriorityQueue<Node>(verticesCount, new Node());
+        PriorityQueue<Node> pq = new PriorityQueue<Node>(verticesCount, Node::compareTo);
         //Adding all vertices to distances map and setting the value of distance to max
         for (T vertex : adj.keySet()) {
-            distances.put(new Node(vertex, 0), Integer.MAX_VALUE);
+            distances.put(new Node(vertex), Integer.MAX_VALUE);
         }
-        distances.put(new Node(source, null), 0);
+        distances.put(new Node(source, 0), 0);
 
         pq.add(new Node(source, 0));
 
@@ -33,35 +33,31 @@ public class Pathfind<T> {
                     T destNode = edge.getDestination();
 
                     if (totalCost < distances.get(new Node(destNode))) {
-
-                        distances.put(new Node<T>(destNode, vertex), totalCost);
-
+                        Node<T> node1 = new Node<T>(destNode, vertex);
+                        distances.remove(node1);
+                        distances.put(node1, totalCost);
 
                     }
-                    pq.add(new Node(destNode, totalCost));
+                    pq.add(new Node(destNode, totalCost, vertex));
                 }
             }
 
         }
 
         for (Node<T> node : distances.keySet()) {
-            System.out.println(node.getNode().toString() + " ||| Cost = " + distances.get(node));
+            System.out.print(node.getNode().toString() + " ||| Cost = " + distances.get(node));
             if (node.getPredecessor() != null) {
-                System.out.println(" ||| Predecessor = " + node.getPredecessor());
+                System.out.println(" ||| Predecessor = " + node.getPredecessor().toString());
             }
         }
 
     }
 
 
-    public class Node<T> implements Comparator<Node> {
+    public class Node<T> implements Comparable<Node<T>> {
         private T node;
         private int cost;
         private T predecessor;
-
-        public Node() {
-
-        }
 
         public Node(T node) {
             this.node = node;
@@ -100,14 +96,6 @@ public class Pathfind<T> {
             this.predecessor = predecessor;
         }
 
-        @Override
-        public int compare(Node node1, Node node2) {
-            if (node1.cost < node2.cost)
-                return -1;
-            if (node1.cost > node2.cost)
-                return 1;
-            return 0;
-        }
 
         @Override
         public boolean equals(Object o) {
@@ -120,6 +108,11 @@ public class Pathfind<T> {
         @Override
         public int hashCode() {
             return Objects.hash(node);
+        }
+
+        @Override
+        public int compareTo(Node<T> other) {
+            return Integer.compare(cost, other.getCost());
         }
     }
 }
