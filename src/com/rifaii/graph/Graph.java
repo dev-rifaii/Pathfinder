@@ -1,4 +1,9 @@
-import java.util.*;
+package com.rifaii.graph;
+
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public interface Graph<T> {
 
@@ -13,8 +18,8 @@ public interface Graph<T> {
 
     void printAdjacencyList();
 
-    List<Edge> getNeighbours(T vertex);
+    Set<Edge> getNeighbours(T vertex);
 
 
-    Map<T, List<Edge>> getAdjacencyList();
+    Map<T, Set<Edge>> getAdjacencyList();
 }

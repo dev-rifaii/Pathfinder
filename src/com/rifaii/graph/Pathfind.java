@@ -1,3 +1,5 @@
+package com.rifaii.graph;
+
 import java.util.*;
 
 
@@ -7,7 +9,7 @@ public class Pathfind<T> {
     //Dijkstra's Algorithm
     public void findShortestPath(Graph graph, T source) {
         //gets the adjacency list
-        Map<T, List<Edge>> adj = graph.getAdjacencyList();
+        Map<T, Set<Edge>> adj = graph.getAdjacencyList();
         int verticesCount = adj.size();
         //Storing the distances here
         Map<Node<T>, Integer> distances = new HashMap<>();
@@ -45,7 +47,10 @@ public class Pathfind<T> {
         }
 
         for (Node<T> node : distances.keySet()) {
-            System.out.print(node.getNode().toString() + " ||| Cost = " + distances.get(node));
+            if (distances.get(node) < Integer.MAX_VALUE) {
+                System.out.print(node.getNode().toString() + " ||| Cost = " + distances.get(node));
+
+            }
             if (node.getPredecessor() != null) {
                 System.out.println(" ||| Predecessor = " + node.getPredecessor().toString());
             }

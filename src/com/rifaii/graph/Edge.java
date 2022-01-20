@@ -1,3 +1,5 @@
+package com.rifaii.graph;
+
 public class Edge<T> {
 
     private T destination;

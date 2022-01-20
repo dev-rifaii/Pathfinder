@@ -1,12 +1,15 @@
+package com.rifaii.graph;
+
 import java.util.*;
 
-public class DirectedGraph<T> implements Graph<T> {
-    protected final Map<T, List<Edge>> adjacencyList = new HashMap<>();
+public abstract class BaseGraph<T> implements Graph<T> {
+
+    protected final Map<T, Set<Edge>> adjacencyList = new HashMap<>();
 
     @Override
     public boolean addVertex(T vertex) {
         if (!adjacencyList.containsKey(vertex)) {
-            adjacencyList.put(vertex, new LinkedList<Edge>());
+            adjacencyList.put(vertex, new HashSet<>());
             return true;
         }
         return false;
@@ -16,11 +19,11 @@ public class DirectedGraph<T> implements Graph<T> {
     public boolean removeVertex(T vertex) {
         if (adjacencyList.containsKey(vertex)) {
             adjacencyList.remove(vertex);
-            for (List<Edge> entry : adjacencyList.values()) {
-                List<Edge> list = entry;
-                for (Edge e : list) {
+            for (Set<Edge> entry : adjacencyList.values()) {
+                Set<Edge> set = entry;
+                for (Edge e : set) {
                     if (e.getDestination().equals(vertex)) {
-                        list.remove(e);
+                        set.remove(e);
                     }
                 }
             }
@@ -29,19 +32,10 @@ public class DirectedGraph<T> implements Graph<T> {
         return false;
     }
 
-    @Override
-    public boolean addEdge(T src, Edge dst) {
-        if (adjacencyList.containsKey(src) && adjacencyList.containsKey(dst.getDestination())) {
-            adjacencyList.get(src).add(dst);
-            return true;
-        }
-        return false;
-    }
-
-
+    //Removes the edge from the list of the source and destination
     @Override
     public boolean removeEdge(T source, T destination) {
-        if (adjacencyList.containsKey(source)) {
+        if (adjacencyList.containsKey(source) && adjacencyList.containsKey(destination)) {
             for (Edge e : adjacencyList.get(source)) {
                 if (e.getDestination().equals(destination)) {
                     adjacencyList.get(source).remove(e);
@@ -51,12 +45,15 @@ public class DirectedGraph<T> implements Graph<T> {
         }
         return false;
     }
-    public Map<T, List<Edge>> getAdjacencyList() {
+
+    public Set<Edge> getNeighbours(T vertex) {
+        return adjacencyList.get(vertex);
+    }
+
+    public Map<T, Set<Edge>> getAdjacencyList() {
         return Collections.unmodifiableMap(adjacencyList);
     }
-    public List<Edge> getNeighbours(T node) {
-        return adjacencyList.get(node);
-    }
+
 
     //Prints the adjacecny list
     public void printAdjacencyList() {
@@ -64,6 +61,5 @@ public class DirectedGraph<T> implements Graph<T> {
             System.out.println(entry.getKey() + " " + entry.getValue().toString());
         });
     }
-
 
 }
