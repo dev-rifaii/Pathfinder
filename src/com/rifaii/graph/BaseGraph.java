@@ -19,14 +19,13 @@ public abstract class BaseGraph<T> implements Graph<T> {
     public boolean removeVertex(T vertex) {
         if (adjacencyList.containsKey(vertex)) {
             adjacencyList.remove(vertex);
-            for (Set<Edge> entry : adjacencyList.values()) {
-                Set<Edge> set = entry;
-                for (Edge e : set) {
-                    if (e.getDestination().equals(vertex)) {
-                        set.remove(e);
-                    }
-                }
-            }
+            adjacencyList.values().stream()
+                    .forEach(set -> set.stream()
+                            .forEach(edge -> {
+                                if (edge.getDestination().equals(vertex)) {
+                                    set.remove(edge);
+                                }
+                            }));
             return true;
         }
         return false;
@@ -36,12 +35,10 @@ public abstract class BaseGraph<T> implements Graph<T> {
     @Override
     public boolean removeEdge(T source, T destination) {
         if (adjacencyList.containsKey(source) && adjacencyList.containsKey(destination)) {
-            for (Edge e : adjacencyList.get(source)) {
-                if (e.getDestination().equals(destination)) {
-                    adjacencyList.get(source).remove(e);
-                    return true;
-                }
-            }
+            adjacencyList.get(source).stream()
+                    .filter(edge -> edge.getDestination().equals(destination))
+                    .forEach(e -> adjacencyList.get(source).remove(e));
+            return true;
         }
         return false;
     }
